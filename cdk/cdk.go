@@ -6,8 +6,16 @@ import (
 	"os/exec"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsevents"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awseventstargets"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
+)
+
+const (
+	LAMBDA_NAME   = "JapaneseWeatherWarningsNotifyFunction"
+	SCHEDULE_NAME = "JapaneseWeatherWarningsNotifySchedule"
 )
 
 type CdkStackProps struct {
@@ -26,6 +34,29 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	if err := buildCommand.Run(); err != nil {
 		return nil, err
 	}
+
+	// Define Lambda Function
+	lambdaFunction := awslambda.NewFunction(scope, jsii.String(LAMBDA_NAME), &awslambda.FunctionProps{
+		FunctionName: jsii.String(LAMBDA_NAME),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
+		Code:         awslambda.Code_FromAsset(jsii.String("../lambda/bin"), nil),
+		Handler:      jsii.String("main"),
+	})
+
+	// Define EventBridge Scheduler Rule
+	rule := awsevents.NewRule(scope, jsii.String(SCHEDULE_NAME), &awsevents.RuleProps{
+		RuleName: jsii.String(SCHEDULE_NAME),
+		Schedule: awsevents.Schedule_Cron(&awsevents.CronOptions{
+			WeekDay: jsii.String(os.Getenv("SCHEDULE_WEEKDAY")),
+			Hour:    jsii.String(os.Getenv("SCHEDULE_TIME")[0:2]),
+			Minute:  jsii.String(os.Getenv("SCHEDULE_TIME")[2:4]),
+		}),
+	})
+
+	// Add Lambda Function to EventBridge Scheduler Rule
+	rule.AddTarget(awseventstargets.NewLambdaFunction(lambdaFunction, &awseventstargets.LambdaFunctionProps{
+		RetryAttempts: jsii.Number(2),
+	}))
 
 	return stack, nil
 }
