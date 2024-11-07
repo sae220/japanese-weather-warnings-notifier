@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/constructs-go/constructs/v10"
@@ -12,21 +14,20 @@ type CdkStackProps struct {
 	awscdk.StackProps
 }
 
-func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) awscdk.Stack {
+func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (awscdk.Stack, error) {
 	var sprops awscdk.StackProps
 	if props != nil {
 		sprops = props.StackProps
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	// The code that defines your stack goes here
+	// Build go
+	buildCommand := exec.Command("go", "build", "../lambda/main.go")
+	if err := buildCommand.Run(); err != nil {
+		return nil, err
+	}
 
-	// example resource
-	// queue := awssqs.NewQueue(stack, jsii.String("CdkQueue"), &awssqs.QueueProps{
-	// 	VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
-	// })
-
-	return stack
+	return stack, nil
 }
 
 func main() {
@@ -34,11 +35,15 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	NewCdkStack(app, "CdkStack", &CdkStackProps{
+	_, err := NewCdkStack(app, "CdkStack", &CdkStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},
 	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	app.Synth(nil)
 }
