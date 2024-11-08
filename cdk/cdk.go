@@ -30,7 +30,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	// Build go
-	buildCommand := exec.Command("go", "build", "../lambda/main.go")
+	buildCommand := exec.Command("go", "build", "-C", "../lambda", "main.go")
 	if err := buildCommand.Run(); err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	lambdaFunction := awslambda.NewFunction(scope, jsii.String(LAMBDA_NAME), &awslambda.FunctionProps{
 		FunctionName: jsii.String(LAMBDA_NAME),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
-		Code:         awslambda.Code_FromAsset(jsii.String("../lambda/bin"), nil),
+		Code:         awslambda.Code_FromAsset(jsii.String("../lambda"), nil),
 		Handler:      jsii.String("main"),
 	})
 
