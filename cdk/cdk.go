@@ -36,7 +36,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	}
 
 	// Define Lambda Function
-	lambdaFunction := awslambda.NewFunction(scope, jsii.String(LAMBDA_NAME), &awslambda.FunctionProps{
+	lambdaFunction := awslambda.NewFunction(stack, jsii.String(LAMBDA_NAME), &awslambda.FunctionProps{
 		FunctionName: jsii.String(LAMBDA_NAME),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Code:         awslambda.Code_FromAsset(jsii.String("../lambda"), nil),
@@ -44,7 +44,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	})
 
 	// Define EventBridge Scheduler Rule
-	rule := awsevents.NewRule(scope, jsii.String(SCHEDULE_NAME), &awsevents.RuleProps{
+	rule := awsevents.NewRule(stack, jsii.String(SCHEDULE_NAME), &awsevents.RuleProps{
 		RuleName: jsii.String(SCHEDULE_NAME),
 		Schedule: awsevents.Schedule_Cron(&awsevents.CronOptions{
 			WeekDay: jsii.String(os.Getenv("SCHEDULE_WEEKDAY")),
