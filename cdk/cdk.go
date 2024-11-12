@@ -14,8 +14,11 @@ import (
 )
 
 const (
-	LAMBDA_NAME   = "JapaneseWeatherWarningsNotifyFunction"
-	SCHEDULE_NAME = "JapaneseWeatherWarningsNotifySchedule"
+	LAMBDA_DIR        = "../lambda"
+	LAMBDA_BUILD_FILE = "build/main"
+	LAMBDA_FILE       = "main.go"
+	LAMBDA_NAME       = "JapaneseWeatherWarningsNotifyFunction"
+	SCHEDULE_NAME     = "JapaneseWeatherWarningsNotifySchedule"
 )
 
 type CdkStackProps struct {
@@ -30,7 +33,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	// Build go
-	buildCommand := exec.Command("go", "build", "-C", "../lambda", "main.go")
+	buildCommand := exec.Command("go", "build", "-C", LAMBDA_DIR, "-o", LAMBDA_BUILD_FILE, LAMBDA_FILE)
 	if err := buildCommand.Run(); err != nil {
 		return nil, err
 	}
@@ -39,7 +42,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 	lambdaFunction := awslambda.NewFunction(stack, jsii.String(LAMBDA_NAME), &awslambda.FunctionProps{
 		FunctionName: jsii.String(LAMBDA_NAME),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
-		Code:         awslambda.Code_FromAsset(jsii.String("../lambda"), nil),
+		Code:         awslambda.Code_FromAsset(jsii.String("../lambda/build"), nil),
 		Handler:      jsii.String("main"),
 	})
 
