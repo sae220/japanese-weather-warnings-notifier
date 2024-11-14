@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  bootstrap:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,7 +23,7 @@ jobs:
         with:
           go-version: '1.23.x'
 
-      - name: Deploy
+      - name: Bootstrap
         working-directory: ./cdk
         run: cdk bootstrap
         env:
