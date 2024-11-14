@@ -34,6 +34,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 
 	// Build go
 	buildCommand := exec.Command("go", "build", "-C", LAMBDA_DIR, "-o", LAMBDA_BUILD_FILE, LAMBDA_FILE)
+	buildCommand.Env = append(os.Environ(), "CGO_ENABLED=0", "GOOS=linux", "GOARCH=amd64")
 	if err := buildCommand.Run(); err != nil {
 		return nil, err
 	}
