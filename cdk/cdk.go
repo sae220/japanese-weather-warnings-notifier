@@ -15,7 +15,7 @@ import (
 
 const (
 	LAMBDA_DIR        = "../lambda"
-	LAMBDA_BUILD_FILE = "build/main"
+	LAMBDA_BUILD_FILE = "build/bootstrap"
 	LAMBDA_FILE       = "main.go"
 	LAMBDA_NAME       = "JapaneseWeatherWarningsNotifyFunction"
 	SCHEDULE_NAME     = "JapaneseWeatherWarningsNotifySchedule"
