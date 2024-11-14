@@ -44,6 +44,9 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Code:         awslambda.Code_FromAsset(jsii.String("../lambda/build"), nil),
 		Handler:      jsii.String("main"),
+		Environment: &map[string]*string{
+			"LINE_CHANNEL_TOKEN": jsii.String(os.Getenv("LINE_CHANNEL_TOKEN")),
+		},
 	})
 
 	// Define EventBridge Scheduler Rule

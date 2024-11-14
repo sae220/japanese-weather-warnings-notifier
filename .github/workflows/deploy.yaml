@@ -32,5 +32,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           CDK_ACCOUNT: ${{ secrets.CDK_ACCOUNT }}
           CDK_REGION: ${{ secrets.CDK_REGION }}
+          LINE_CHANNEL_TOKEN: ${{ secrets.LINE_CHANNEL_TOKEN }}
           SCHEDULE_WEEKDAY: ${{ vars.SCHEDULE_WEEKDAY }}
           SCHEDULE_TIME: ${{ vars.SCHEDULE_TIME }}
