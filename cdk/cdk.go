@@ -14,6 +14,7 @@ import (
 )
 
 const (
+	CDK_STACK_NAME    = "JapaneseWeatherWarningsNotifierCDKStack"
 	LAMBDA_DIR        = "../lambda"
 	LAMBDA_BUILD_FILE = "build/bootstrap"
 	LAMBDA_FILE       = "main.go"
@@ -73,7 +74,7 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	_, err := NewCdkStack(app, "CdkStack", &CdkStackProps{
+	_, err := NewCdkStack(app, CDK_STACK_NAME, &CdkStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},
