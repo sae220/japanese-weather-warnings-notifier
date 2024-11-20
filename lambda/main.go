@@ -20,6 +20,22 @@ func InitLineBot() (*LineBot, error) {
 	return &LineBot{api}, nil
 }
 
+// ある地域に出ている気象警報・注意報一つ
+type AreaWeatherWarning struct {
+	// 気象警報・注意報コード
+	code string
+	// 気象警報・注意報の状態
+	status string
+}
+
+// ある地域に出ている気象警報・注意報の配列
+type AreaWeatherWarnings []AreaWeatherWarning
+
+// 地域コードに対応する地域に出ている気象警報・注意報を取得する
+func FetchAreaWeatherWarnings(areaCode string) (AreaWeatherWarnings, error) {
+	return nil, nil
+}
+
 func (lineBot *LineBot) BroadcastSimpleMessage(text string) (*map[string]interface{}, error) {
 	return lineBot.api.Broadcast(
 		&messaging_api.BroadcastRequest{
@@ -37,6 +53,11 @@ func HandleLambda() error {
 	lineBot, err := InitLineBot()
 	if err != nil {
 		return fmt.Errorf("line bot failed in initialization: %s", err)
+	}
+
+	_, err = FetchAreaWeatherWarnings(os.Getenv("AREA_CODE"))
+	if err != nil {
+		return fmt.Errorf("failed in fetching weather warnings: %s", err)
 	}
 
 	_, err = lineBot.BroadcastSimpleMessage("Hello World!")
