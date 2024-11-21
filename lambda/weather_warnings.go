@@ -11,7 +11,7 @@ type AreaWeatherWarning struct {
 // ある地域に出ている気象警報・注意報の配列
 type AreaWeatherWarnings []AreaWeatherWarning
 
-// 地域コードに対応する地域に出ている気象警報・注意報を取得する
-func FetchAreaWeatherWarnings(areaCode string) (AreaWeatherWarnings, error) {
+// 全国地方公共団体コードに対応する地域に出ている気象警報・注意報を取得する
+func FetchAreaWeatherWarnings(areaCode AreaCode) (AreaWeatherWarnings, error) {
 	return nil, nil
 }

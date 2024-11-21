@@ -13,7 +13,7 @@ func HandleLambda() error {
 		return fmt.Errorf("line bot failed in initialization: %s", err)
 	}
 
-	_, err = FetchAreaWeatherWarnings(os.Getenv("AREA_CODE"))
+	_, err = FetchAreaWeatherWarnings(AreaCode(os.Getenv("AREA_CODE")))
 	if err != nil {
 		return fmt.Errorf("failed in fetching weather warnings: %s", err)
 	}
