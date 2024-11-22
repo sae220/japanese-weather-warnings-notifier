@@ -36,15 +36,12 @@ func (areaCode AreaCode) hasValidCheckDigit() bool {
 	return calculatedDigit == checkDigit
 }
 
+// 検査数字が0の全国地方公共団体コードを取得する
+func (areaCode AreaCode) WithoutCheckDigit() AreaCode {
+	return areaCode[:5] + AreaCode("0")
+}
+
 // 地方公共団体が位置している都道府県のコードを取得する
 func (areaCode AreaCode) PrefectureAreaCodeWithoutCheckDigit() AreaCode {
-	var prefectureAreaCode string
-	for i := 0; i < 5; i++ {
-		if i < 2 {
-			prefectureAreaCode += string(areaCode[i])
-		} else {
-			prefectureAreaCode += "0"
-		}
-	}
-	return AreaCode(prefectureAreaCode)
+	return areaCode[:2] + AreaCode("0000")
 }
