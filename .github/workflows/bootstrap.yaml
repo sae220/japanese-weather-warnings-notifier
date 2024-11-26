@@ -34,3 +34,4 @@ jobs:
           LINE_CHANNEL_TOKEN: ${{ secrets.LINE_CHANNEL_TOKEN }}
           SCHEDULE_WEEKDAY: ${{ vars.SCHEDULE_WEEKDAY }}
           SCHEDULE_TIME: ${{ vars.SCHEDULE_TIME }}
+          AREA_CODE: ${{ vars.AREA_CODE }}

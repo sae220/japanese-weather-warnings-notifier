@@ -46,6 +46,7 @@ func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) (a
 		Code:         awslambda.Code_FromAsset(jsii.String("../lambda/build"), nil),
 		Handler:      jsii.String("main"),
 		Environment: &map[string]*string{
+			"AREA_CODE":          jsii.String(os.Getenv("AREA_CODE")),
 			"LINE_CHANNEL_TOKEN": jsii.String(os.Getenv("LINE_CHANNEL_TOKEN")),
 		},
 	})
