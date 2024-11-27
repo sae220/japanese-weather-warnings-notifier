@@ -1,4 +1,4 @@
-package main
+package jpweatherwarnings
 
 import (
 	"regexp"
