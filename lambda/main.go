@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
+
+	"lambda/jpweatherwarnings"
 )
 
 func HandleLambda() error {
@@ -13,7 +15,8 @@ func HandleLambda() error {
 		return fmt.Errorf("line bot failed in initialization: %s", err)
 	}
 
-	_, err = FetchAreaWeatherWarnings(AreaCode(os.Getenv("AREA_CODE")))
+	areaCode := jpweatherwarnings.AreaCode(os.Getenv("AREA_CODE"))
+	_, err = jpweatherwarnings.FetchAreaWeatherWarnings(areaCode)
 	if err != nil {
 		return fmt.Errorf("failed in fetching weather warnings: %s", err)
 	}
