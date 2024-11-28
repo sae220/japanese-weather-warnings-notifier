@@ -51,7 +51,7 @@ func FetchAreaWeatherWarnings(areaCode AreaCode) (Warnings, error) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
+	if res.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("HTTPリクエストのレスポンスが%dでした", res.StatusCode)
 	}
 
