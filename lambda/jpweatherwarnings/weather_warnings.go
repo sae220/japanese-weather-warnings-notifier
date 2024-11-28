@@ -35,6 +35,13 @@ type (
 	}
 )
 
+func (warnings Warnings) String() (text string) {
+	for _, warning := range warnings {
+		text += fmt.Sprintf("%s %s\n", warning.Code, warning.Status)
+	}
+	return
+}
+
 // 全国地方公共団体コードに対応する地域に出ている気象警報・注意報を取得する
 func FetchAreaWeatherWarnings(areaCode AreaCode) (Warnings, error) {
 	if !areaCode.IsValid() {
