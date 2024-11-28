@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
 	"github.com/line/line-bot-sdk-go/v8/linebot/messaging_api"
@@ -21,7 +23,17 @@ func InitLineBot() (*LineBot, error) {
 }
 
 // LINEで単純な文字列を全ての友だち向けに送信する
-func (lineBot *LineBot) BroadcastSimpleMessage(text string) (*map[string]interface{}, error) {
+func (lineBot *LineBot) BroadcastSimpleMessage(obj any) (*map[string]interface{}, error) {
+	var text string
+	switch typedObj := obj.(type) {
+	case string:
+		text = typedObj
+	case fmt.Stringer:
+		text = typedObj.String()
+	default:
+		return nil, errors.New("メッセージを文字列にできません")
+	}
+
 	return lineBot.api.Broadcast(
 		&messaging_api.BroadcastRequest{
 			Messages: []messaging_api.MessageInterface{
