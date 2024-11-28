@@ -1,7 +1,11 @@
 package jpweatherwarnings
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
+	"net/http"
 )
 
 // 気象警報・注意報を取得するAPIのレスポンスの形式
@@ -39,5 +43,35 @@ func FetchAreaWeatherWarnings(areaCode AreaCode) (Warnings, error) {
 	if areaCode.IsPrefectureAreaCode() {
 		return nil, errors.New("都道府県ではなく市町村のコードを入力してください")
 	}
-	return nil, nil
+
+	url := fmt.Sprintf("https://www.jma.go.jp/bosai/warning/data/warning/%s.json", areaCode.PrefectureAreaCodeWithoutCheckDigit())
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, fmt.Errorf("HTTPリクエスト時にエラーが発生しました: %s", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != 200 {
+		return nil, fmt.Errorf("HTTPリクエストのレスポンスが%dでした", res.StatusCode)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// JSONにする
+	var weatherWarnings WeatherWarningApiResponse
+	err = json.Unmarshal(body, &weatherWarnings)
+	if err != nil {
+		return nil, fmt.Errorf("HTTPレスポンスをJSONに変換できませんでした: %s", err)
+	}
+
+	// 該当する地方公共団体コードのものだけ取り出す
+	for _, area := range weatherWarnings.AreaTypes[1].Areas {
+		if area.Code == areaCode.WithoutCheckDigit() {
+			return area.Warnings, nil
+		}
+	}
+	return nil, errors.New("該当する地方公共団体コードのデータが見つかりませんでした")
 }
