@@ -13,12 +13,14 @@ type AreaCode string
 
 // 全国地方公共団体コードが有効か確認する
 func (areaCode AreaCode) IsValid() bool {
-	// 6文字の数字
-	if match, _ := regexp.MatchString(`^\d{6}$`, string(areaCode)); !match {
-		return false
-	}
-	// 検査数字の検査
-	return areaCode.hasValidCheckDigit()
+	// 6桁の数字かつ検査数字が正しい
+	return areaCode.isSixDigits() && areaCode.hasValidCheckDigit()
+}
+
+// 全国地方公共団体コードが6桁の数字か確認する
+func (areaCode AreaCode) isSixDigits() bool {
+	match, _ := regexp.MatchString(`^\d{6}$`, string(areaCode))
+	return match
 }
 
 // 全国地方公共団体コードの検査数字を検査する
