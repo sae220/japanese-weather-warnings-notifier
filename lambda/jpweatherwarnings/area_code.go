@@ -43,12 +43,12 @@ func (areaCode AreaCode) IsPrefectureAreaCode() bool {
 	return string(areaCode[2:5]) == "000"
 }
 
-// 検査数字が0の全国地方公共団体コードを取得する
-func (areaCode AreaCode) WithoutCheckDigit() AreaCode {
-	return AreaCode(string(areaCode[:5]) + "00")
+// 気象警報・注意報を取得するために必要なコードを取得する
+func (areaCode AreaCode) CodeForAPI() string {
+	return string(areaCode[:5]) + "00"
 }
 
-// 地方公共団体が位置している都道府県のコードを取得する
-func (areaCode AreaCode) PrefectureAreaCodeWithoutCheckDigit() AreaCode {
-	return AreaCode(string(areaCode[:2]) + "0000")
+// 気象警報・注意報を取得するために必要な都道府県コードを取得する
+func (areaCode AreaCode) PrefectureCodeForAPI() string {
+	return string(areaCode[:2]) + "0000"
 }

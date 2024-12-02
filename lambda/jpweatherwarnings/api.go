@@ -23,7 +23,7 @@ type (
 	Areas []Area
 
 	Area struct {
-		Code     AreaCode `json:"code"`
+		Code     string   `json:"code"`
 		Warnings Warnings `json:"warnings"`
 	}
 
@@ -51,7 +51,7 @@ func FetchAreaWeatherWarnings(areaCode AreaCode) (Warnings, error) {
 		return nil, errors.New("都道府県ではなく市町村のコードを入力してください")
 	}
 
-	url := fmt.Sprintf("https://www.jma.go.jp/bosai/warning/data/warning/%s.json", areaCode.PrefectureAreaCodeWithoutCheckDigit())
+	url := fmt.Sprintf("https://www.jma.go.jp/bosai/warning/data/warning/%s.json", areaCode.PrefectureCodeForAPI())
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("HTTPリクエスト時にエラーが発生しました: %s", err)
@@ -76,7 +76,7 @@ func FetchAreaWeatherWarnings(areaCode AreaCode) (Warnings, error) {
 
 	// 該当する地方公共団体コードのものだけ取り出す
 	for _, area := range weatherWarnings.AreaTypes[1].Areas {
-		if area.Code == areaCode.WithoutCheckDigit() {
+		if area.Code == areaCode.CodeForAPI() {
 			return area.Warnings, nil
 		}
 	}
