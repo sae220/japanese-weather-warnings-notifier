@@ -6,7 +6,7 @@ import (
 	"lambda/jpweatherwarnings"
 )
 
-func TestAreaCodeIsValid(t *testing.T) {
+func TestAreaCode_IsValid(t *testing.T) {
 	tests := map[string]struct {
 		areaCodeText string
 		result       bool
