@@ -30,8 +30,8 @@ type (
 	Warnings []Warning
 
 	Warning struct {
-		Code   string `json:"code"`
-		Status string `json:"status"`
+		Code   WeatherWarningCode `json:"code"`
+		Status string             `json:"status"`
 	}
 )
 
@@ -43,7 +43,7 @@ const (
 
 func (warnings Warnings) String() (text string) {
 	for _, warning := range warnings {
-		text += fmt.Sprintf("%s %s\n", warning.Code, warning.Status)
+		text += fmt.Sprintf("%s %s\n", WeatherWarningTypeByCode[warning.Code].Name(), warning.Status)
 	}
 	return
 }
