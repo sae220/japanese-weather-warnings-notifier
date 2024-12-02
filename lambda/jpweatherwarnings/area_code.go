@@ -22,10 +22,6 @@ func (areaCode AreaCode) IsValid() bool {
 // 第１桁から第５桁までの数字に、それぞれ６．５．４．３．２を乗じて算出した積の和を求め、その和を１１で除し、商と剰余（以下「余り数字」という。）を求めて、１１と余り数字との差の下１桁の数字を検査数字とする（全国地方公共団体コード仕様より）
 func (areaCode AreaCode) hasValidCheckDigit() bool {
 	checkDigit := int(areaCode[5] - '0')
-	// 気象庁で用いられている検査数字がないものの場合は良しとする
-	if checkDigit == 0 {
-		return true
-	}
 
 	var calculatedDigit int
 	for i := 0; i < 5; i++ {
