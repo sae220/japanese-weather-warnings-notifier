@@ -35,6 +35,12 @@ type (
 	}
 )
 
+// APIのレスポンスのAreaType
+const (
+	Prefecture = iota
+	Cities
+)
+
 func (warnings Warnings) String() (text string) {
 	for _, warning := range warnings {
 		text += fmt.Sprintf("%s %s\n", warning.Code, warning.Status)
@@ -75,7 +81,7 @@ func FetchAreaWeatherWarnings(areaCode AreaCode) (Warnings, error) {
 	}
 
 	// 該当する地方公共団体コードのものだけ取り出す
-	for _, area := range weatherWarnings.AreaTypes[1].Areas {
+	for _, area := range weatherWarnings.AreaTypes[Cities].Areas {
 		if area.Code == areaCode.CodeForAPI() {
 			return area.Warnings, nil
 		}
