@@ -1,3 +1,7 @@
+// 全国地方公共団体コードのバリデーションと気象警報・注意報を取得するために必要なコードへの変換を行う
+//
+// 全国地方公共団体コードについては[総務省｜地方行政のデジタル化｜全国地方公共団体コード](https://www.soumu.go.jp/denshijiti/code.html)を参照
+
 package jpweatherwarnings
 
 import (
